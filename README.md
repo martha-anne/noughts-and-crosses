@@ -31,3 +31,8 @@ return BoardState.DRAW
 for arg in sys.argv[1:]:
 print(getStateOfBoard(arg))
 ```
+
+## Testing
+
+Run all discoverable unit tests by running the following command from the project root:
+```python -m unittest discover```
