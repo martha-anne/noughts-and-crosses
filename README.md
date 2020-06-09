@@ -32,6 +32,11 @@ for arg in sys.argv[1:]:
 print(getStateOfBoard(arg))
 ```
 
+## Usage
+
+Run main.py from the project root, passing in board definitions:
+```python main.py XXXOO____ XX_OOOX__ X_OOO_XXX XXXOXOXOO XOOOXXXXO```
+
 ## Testing
 
 Run all discoverable unit tests by running the following command from the project root:
