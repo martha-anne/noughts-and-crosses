@@ -6,7 +6,7 @@
 Abiding by the game rules, adapt the Python 3 starting code to calculate the state of a given board. The program should accept boards using the representation in 1.2 as arguments, and should print one result per line in order.
 
 ### Board Representation
-Boards are represented as strings of length nine, corresponding to the nine slots, starting in the top left slot and counting across each row. The character ”X” is used for Crosses, ”O” (letter O) for Noughts, and ”_” for empty slots. Note that tests can be any permutation-with-repetition of ”X”, ”O”, and ”_” of length nine.
+Boards are represented as strings of length nine, corresponding to the nine slots, starting in the top left slot and counting across each row. The character ”X” is used for Crosses, ”O” (letter O) for Noughts, and ”\_” for empty slots. Note that tests can be any permutation-with-repetition of ”X”, ”O”, and ”\_” of length nine.
 
 ### Game Rules
 - Crosses always goes first
