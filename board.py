@@ -49,7 +49,7 @@ class BoardStateDecider:
         if not self.__is_board_definition_natural_gameplay():
             return BoardState.INVALID
 
-        # Check whether noughts and crosses have manages to successfully make lines
+        # Check whether noughts and crosses have managed to successfully make lines
         # I have sacrificed efficiency for readability here. If efficiency was the highest priority I would re-write this to reduce unnecessary recursion.
         noughts_has_line = self.__board_has_any_line(BoardInput.NAUGHT)
         crosses_has_line = self.__board_has_any_line(BoardInput.CROSS)
