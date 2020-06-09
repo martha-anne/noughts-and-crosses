@@ -35,7 +35,7 @@ class TestBoardStateDecider(unittest.TestCase):
         self.assertEqual(board_state_decider.decide_state_of_board(), board.BoardState.GAME_IN_PROGRESS)
 
     def test_decide_state_of_board_expect_draw_when_board_definition_has_no_empty_spaces_and_no_winner (self):
-        board_definition = "OOXXXOOOX"
+        board_definition = "OOXXXOOXX"
         board_state_decider = board.BoardStateDecider(board_definition)
         self.assertEqual(board_state_decider.decide_state_of_board(), board.BoardState.DRAW)
 
