@@ -1,14 +1,14 @@
 import re
-from enum import Enum
 
 class BoardState:
     NOUGHTS_WIN = 'NOUGHTS_WIN'
     CROSSES_WIN = 'CROSSES_WIN'
     DRAW = 'DRAW'
-    GAME_IN_PROGRESS = 'GAME_IN_PROGRESS' # This will be used in the case that there is no winner, but empty board spaces remain.
-    INVALID = 'INVALID' # This will be used in the case that the numer of Xs is not equal to or one greater than the number of Os.
-    # Do we also need to return an INVALID state if we recieve a board where both Xs and Os have formed a line (eg XXXOOO___)? 
-
+    # GAME_IN_PROGRESS be used in the case that there is no winner, but empty board spaces remain.
+    GAME_IN_PROGRESS = 'GAME_IN_PROGRESS'
+    # INVALID will be used in the case that the numer of Xs is not equal to or one greater than the number of Os, indicating unnatural gameplay.
+    # INVALID will also be used if we recieve a board where both Xs and Os have formed a line (eg XXXOOO___), as this also indicated unnatural gameplay. 
+    INVALID = 'INVALID' 
 class BoardInput:
     CROSS = "X"
     NAUGHT = 'O'
@@ -16,8 +16,13 @@ class BoardInput:
 
 class BoardStateDecider:
 
-    _re_is_board_definition_supported_length_and_characters = "^[XO_]{9}$"
+    # Regex to check for a string of length 9 containing only the characters X O and _.
+    _re_is_board_definition_supported_length_and_characters = "^[XO_]{9}$" 
+
+    # Regex to check for a string of length 9 containing only the characters X and O.
     _re_is_board_full = "^[XO]{9}$"
+
+    # Indexes of the board definition corresponding to horizontal, vertical or diagonal lines.
     _line_index_definitions = [
         [0, 1, 2],
         [3, 4, 5],
@@ -30,31 +35,39 @@ class BoardStateDecider:
     ]
 
     def __init__(self, board_definition: str):
+        # Cast the board definition to uppercase. All checks from now on will assume uppercase characters.
         self.board_definition = board_definition.upper()
 
     def decide_state_of_board(self) -> BoardState:
 
+        # Check that the board definition is 9 characters long, and contains only X O and _. Return invalid if not.
         if not self.__is_board_definition_supported_length_and_characters():
             return BoardState.INVALID
         
+        # Check that the board does not have an excessive number of Xs or Os so as to indicate unnatural gameplay. Return invalid if not.
         if not self.__is_board_definition_natural_gameplay():
             return BoardState.INVALID
 
+        # Check whether noughts and crosses have manages to successfully make lines
         noughts_has_line = self.__board_has_any_line(BoardInput.NAUGHT)
         crosses_has_line = self.__board_has_any_line(BoardInput.CROSS)
 
+        # If both noughts and crosses have made a line, gameplay has been unnatural. Return invalid.
         if noughts_has_line and crosses_has_line:
             return BoardState.INVALID
 
+        # If only noughts or only crosses has made a line, that party is considered to have won. Return winner.
         if noughts_has_line:
             return BoardState.NOUGHTS_WIN
 
         if crosses_has_line:
             return BoardState.CROSSES_WIN
         
+        # If the board is full, there have been no winners, and no valid moves remain, return draw.
         if self.__is_board_full():
             return BoardState.DRAW
 
+        # In all other cases we can consider the game to remain in progress.
         return BoardState.GAME_IN_PROGRESS
 
 
