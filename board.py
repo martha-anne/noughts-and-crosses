@@ -1,4 +1,5 @@
 import re
+from enum import Enum
 
 class BoardState:
     NOUGHTS_WIN = 'NOUGHTS_WIN'
@@ -15,13 +16,20 @@ class BoardInput:
 
 class BoardStateDecider:
 
-    
+    _re_is_board_definition_supported_length_and_characters = "^[XO_]{9}$"
+    _re_is_board_full = "^[XO]{9}$"
+    _line_index_definitions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ]
 
     def __init__(self, board_definition: str):
-        self._board_definition_length = 9
-        self._re_is_board_definition_supported_length_and_characters = "^[XO_]{" + str(self._board_definition_length) + "}$"
-        self._re_is_board_full = "^[XO]{" + str(self._board_definition_length) + "}$"
-
         self.board_definition = board_definition.upper()
 
     def decide_state_of_board(self) -> BoardState:
@@ -29,13 +37,49 @@ class BoardStateDecider:
         if not self.__is_board_definition_supported_length_and_characters():
             return BoardState.INVALID
         
-        raise Exception("Error")
+        if not self.__is_board_definition_natural_gameplay():
+            return BoardState.INVALID
+
+        noughts_has_line = self.__board_has_any_line(BoardInput.NAUGHT)
+        crosses_has_line = self.__board_has_any_line(BoardInput.CROSS)
+
+        if noughts_has_line and crosses_has_line:
+            return BoardState.INVALID
+
+        if noughts_has_line:
+            return BoardState.NOUGHTS_WIN
+
+        if crosses_has_line:
+            return BoardState.CROSSES_WIN
+        
+        if self.__is_board_full():
+            return BoardState.DRAW
+
+        return BoardState.GAME_IN_PROGRESS
 
 
     def __is_board_definition_supported_length_and_characters(self) -> bool:
         pattern = re.compile(self._re_is_board_definition_supported_length_and_characters)
         return pattern.fullmatch(self.board_definition) is not None
 
+    def __is_board_definition_natural_gameplay(self) -> bool:
+        crosses_count = self.board_definition.count(BoardInput.NAUGHT)
+        noughts_count = self.board_definition.count(BoardInput.NAUGHT)
+
+        return crosses_count == noughts_count or crosses_count == (noughts_count + 1)
+
     def __is_board_full(self) -> bool:
         pattern = re.compile(self._re_is_board_full)
         return pattern.fullmatch(self.board_definition) is not None
+
+    def __board_has_any_line(self, board_input: BoardInput) -> bool:
+        for line_index_definition in self._line_index_definitions:
+            if self.__board_has_line(board_input, line_index_definition):
+                return True   
+        return False
+
+    def __board_has_line(self, board_input: BoardInput, line_index_definition: list) -> bool:
+        line = self.board_definition[line_index_definition[0]] + self.board_definition[line_index_definition[1]] + self.board_definition[line_index_definition[2]] 
+        return line == board_input * 3
+        
+
