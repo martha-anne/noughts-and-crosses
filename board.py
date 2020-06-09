@@ -63,7 +63,7 @@ class BoardStateDecider:
         return pattern.fullmatch(self.board_definition) is not None
 
     def __is_board_definition_natural_gameplay(self) -> bool:
-        crosses_count = self.board_definition.count(BoardInput.NAUGHT)
+        crosses_count = self.board_definition.count(BoardInput.CROSS)
         noughts_count = self.board_definition.count(BoardInput.NAUGHT)
 
         return crosses_count == noughts_count or crosses_count == (noughts_count + 1)
