@@ -9,6 +9,7 @@ class BoardState:
     # INVALID will be used in the case that the numer of Xs is not equal to or one greater than the number of Os, indicating unnatural gameplay.
     # INVALID will also be used if we recieve a board where both Xs and Os have formed a line (eg XXXOOO___), as this also indicated unnatural gameplay. 
     INVALID = 'INVALID' 
+
 class BoardInput:
     CROSS = "X"
     NAUGHT = 'O'
@@ -49,6 +50,7 @@ class BoardStateDecider:
             return BoardState.INVALID
 
         # Check whether noughts and crosses have manages to successfully make lines
+        # I have sacrificed efficiency for readability here. If efficiency was the highest priority I would re-write this to reduce unnecessary recursion.
         noughts_has_line = self.__board_has_any_line(BoardInput.NAUGHT)
         crosses_has_line = self.__board_has_any_line(BoardInput.CROSS)
 
