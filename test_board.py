@@ -75,7 +75,7 @@ class TestBoardStateDecider(unittest.TestCase):
         self.assertEqual(board_state_decider.decide_state_of_board(), board.BoardState.CROSSES_WIN)
 
     def test_decide_state_of_board_expect_crosses_win_when_board_definition_has_no_empty_spaces_and_horizontal_line (self):
-        board_definition = "OXOXOXXXX"
+        board_definition = "OXOXOOXXX"
         board_state_decider = board.BoardStateDecider(board_definition)
         self.assertEqual(board_state_decider.decide_state_of_board(), board.BoardState.CROSSES_WIN)
 
