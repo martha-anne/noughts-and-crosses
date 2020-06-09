@@ -12,7 +12,7 @@ class BoardState:
 
 class BoardInput:
     CROSS = "X"
-    NAUGHT = 'O'
+    NOUGHT = 'O'
     EMPTY = "_"
 
 class BoardStateDecider:
@@ -50,9 +50,9 @@ class BoardStateDecider:
             return BoardState.INVALID
 
         # Check whether noughts and crosses have managed to successfully make lines
-        # I have sacrificed efficiency for readability here. If efficiency was the highest priority I would re-write this to reduce unnecessary recursion.
-        noughts_has_line = self.__board_has_any_line(BoardInput.NAUGHT)
-        crosses_has_line = self.__board_has_any_line(BoardInput.CROSS)
+        board_has_lines = self.__get_board_has_lines()
+        noughts_has_line = board_has_lines[BoardInput.NOUGHT]
+        crosses_has_line = board_has_lines[BoardInput.CROSS]
 
         # If both noughts and crosses have made a line, gameplay has been unnatural. Return invalid.
         if noughts_has_line and crosses_has_line:
@@ -79,7 +79,7 @@ class BoardStateDecider:
 
     def __is_board_definition_natural_gameplay(self) -> bool:
         crosses_count = self.board_definition.count(BoardInput.CROSS)
-        noughts_count = self.board_definition.count(BoardInput.NAUGHT)
+        noughts_count = self.board_definition.count(BoardInput.NOUGHT)
 
         return crosses_count == noughts_count or crosses_count == (noughts_count + 1)
 
@@ -87,11 +87,22 @@ class BoardStateDecider:
         pattern = re.compile(self._re_is_board_full)
         return pattern.fullmatch(self.board_definition) is not None
 
-    def __board_has_any_line(self, board_input: BoardInput) -> bool:
+    def __get_board_has_lines (self) -> dict:
+        board_has_lines = {
+            BoardInput.CROSS: False,
+            BoardInput.NOUGHT: False
+        }
+
         for line_index_definition in self._line_index_definitions:
-            if self.__board_has_line(board_input, line_index_definition):
-                return True   
-        return False
+            if self.__board_has_line(BoardInput.CROSS, line_index_definition):
+                board_has_lines[BoardInput.CROSS] = True
+            elif self.__board_has_line(BoardInput.NOUGHT, line_index_definition):
+                board_has_lines[BoardInput.NOUGHT] = True
+
+            if board_has_lines[BoardInput.CROSS] and board_has_lines[BoardInput.NOUGHT]:
+                break
+        
+        return board_has_lines
 
     def __board_has_line(self, board_input: BoardInput, line_index_definition: list) -> bool:
         line = self.board_definition[line_index_definition[0]] + self.board_definition[line_index_definition[1]] + self.board_definition[line_index_definition[2]] 
