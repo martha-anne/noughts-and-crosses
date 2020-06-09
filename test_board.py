@@ -4,6 +4,16 @@ import board
 
 class TestBoardStateDecider(unittest.TestCase):
 
+    def test_decide_state_of_board_expect_invalid_when_board_definition_has_unsupported_characters (self):
+        board_definition = "1234KKXXX"
+        board_state_decider = board.BoardStateDecider(board_definition)
+        self.assertEqual(board_state_decider.decide_state_of_board(), board.BoardState.INVALID)
+
+    def test_decide_state_of_board_expect_invalid_when_board_definition_is_not_9_characters (self):
+        board_definition = "XXXOO_"
+        board_state_decider = board.BoardStateDecider(board_definition)
+        self.assertEqual(board_state_decider.decide_state_of_board(), board.BoardState.INVALID)
+    
     def test_decide_state_of_board_expect_invalid_when_board_definition_has_multiple_winners (self):
         board_definition = "XXXOOO___"
         board_state_decider = board.BoardStateDecider(board_definition)
