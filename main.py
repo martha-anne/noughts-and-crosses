@@ -1,18 +1,12 @@
 import sys
 
-# complete this enum with all the possible states of a noughts and crosses board (there's more than 3)
-class BoardState:
-NOUGHTS_WIN = 'NOUGHTS_WIN'
-CROSSES_WIN = 'CROSSES_WIN'
-DRAW = 'DRAW'
-GAME_IN_PROGRESS = 'GAME_IN_PROGRESS' # This will be used in the case that there is no winner, but empty board spaces remain.
-INVALID = 'INVALID' # This will be used in the case that the numer of Xs is not equal to or one greater than the number of Os.
-# Do we also need to return an INVALID state if we recieve a board where both Xs and Os have formed a line (eg XXXOOO___)? 
+import board
 
 # complete this function so that it returns the correct board state
-def getStateOfBoard(board):
-return BoardState.DRAW
+def getStateOfBoard(board_definition: str) -> board.BoardState:
+    board_state_decider = board.BoardStateDecider(board_definition)
+    return board_state_decider.decide_state_of_board()
 
 # leave this part unchanged
 for arg in sys.argv[1:]:
-print(getStateOfBoard(arg))
+    print(getStateOfBoard(arg))
