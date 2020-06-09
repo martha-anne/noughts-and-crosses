@@ -65,7 +65,7 @@ class TestBoardStateDecider(unittest.TestCase):
         self.assertEqual(board_state_decider.decide_state_of_board(), board.BoardState.NOUGHTS_WIN)
 
     def test_decide_state_of_board_expect_noughts_win_when_board_definition_has_diagonal_line (self):
-        board_definition = "OXX_O_OX_"
+        board_definition = "OXX_O__XO"
         board_state_decider = board.BoardStateDecider(board_definition)
         self.assertEqual(board_state_decider.decide_state_of_board(), board.BoardState.NOUGHTS_WIN)
 
